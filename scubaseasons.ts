@@ -1,5 +1,5 @@
 import type { Options } from './src/entity/options.ts';
-import { ScubaProcessor } from './src/processor/basic/scubaProcessor.ts';
+import { SealifePhotoProcessor } from './src/processor/basic/SealifePhotoProcessor.ts';
 import { initProjectConfig } from './src/util/initProjectConfig.ts';
 
 const options: Options = {
@@ -33,6 +33,12 @@ const options: Options = {
 };
 
 const projectConfig = initProjectConfig(options);
-const processor = new ScubaProcessor(projectConfig);
+const processor = new SealifePhotoProcessor(projectConfig);
 
-const processedImages = await processor.process();
+for (;;) {
+  console.log('----------------------');
+  const processedImages = await processor.process();
+  if (processedImages.length === 0) {
+    break;
+  }
+}

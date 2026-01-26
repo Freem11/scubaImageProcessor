@@ -1,4 +1,4 @@
-export type imageProcessingStatistics = {
+export type ImageProcessingStatistics = {
   variantName: string
   error?:      any
   path:        string

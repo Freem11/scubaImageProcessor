@@ -1,9 +1,9 @@
 import path from 'path';
-import type { imageProcessingStatistics } from '../entity/imageProcessingStatistics.ts';
+import type { ImageProcessingStatistics } from '../entity/imageProcessingStatistics.ts';
 import fs from 'fs';
 
 
-export const saveImageStatistics = async (dirPath: string, fileName: string, statistics: imageProcessingStatistics[]) => {
+export const saveImageStatistics = async (dirPath: string, fileName: string, statistics: ImageProcessingStatistics[]) => {
   for (const variantStat of statistics) {
     if (variantStat.path) {
       const s = await fs.statSync(variantStat.path);

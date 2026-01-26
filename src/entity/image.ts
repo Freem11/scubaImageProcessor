@@ -1,5 +1,7 @@
 export type Image = {
-  id:          number
-  originalUrl: string
-  error:       string | null
+  id:           number
+  entity:       string
+  originalPath: string
+  fileName:     string
+  error:        string | null
 };

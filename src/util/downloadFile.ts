@@ -11,8 +11,4 @@ export const downloadFile = async (from: string, to: string) => {
     download(from),
     writer,
   );
-
-  // Now it is safe to run ImageMagick
-  console.log('Download complete. Starting ImageMagick...');
-  // exec('magick ...')
 };
