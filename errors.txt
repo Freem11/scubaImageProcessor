@@ -1,0 +1,141 @@
+Image 1714064497439.jpg variant xl processed successfully
+Unable to write statistics for  1714064497439.jpg: null
+Image "photos.814" variant sm uploaded successfully
+Image "photos.814" variant md uploaded successfully
+An error was encountered in a non-retryable streaming request.
+E:\www\scubapicture\node_modules\@aws-sdk\core\dist-cjs\submodules\protocols\index.js:69
+                throw this.decorateServiceException(Object.assign(new ErrorCtor({ name: errorName }), errorMetadata
+), dataObject);
+                                                                  ^
+
+S3ServiceException [InternalError]: We encountered an internal error. Please try again.
+    at ProtocolLib.getErrorSchemaOrThrowBaseException (E:\www\scubapicture\node_modules\@aws-sdk\core\dist-cjs\subm
+odules\protocols\index.js:69:67)
+    at AwsRestXmlProtocol.handleError (E:\www\scubapicture\node_modules\@aws-sdk\core\dist-cjs\submodules\protocols
+\index.js:1830:65)
+    at AwsRestXmlProtocol.deserializeResponse (E:\www\scubapicture\node_modules\@smithy\core\dist-cjs\submodules\pr
+otocols\index.js:309:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async E:\www\scubapicture\node_modules\@smithy\core\dist-cjs\submodules\schema\index.js:26:24
+    at async E:\www\scubapicture\node_modules\@aws-sdk\middleware-sdk-s3\dist-cjs\index.js:386:20
+    at async E:\www\scubapicture\node_modules\@smithy\middleware-retry\dist-cjs\index.js:254:46
+    at async E:\www\scubapicture\node_modules\@aws-sdk\middleware-flexible-checksums\dist-cjs\index.js:241:24
+    at async E:\www\scubapicture\node_modules\@aws-sdk\middleware-sdk-s3\dist-cjs\index.js:63:28
+    at async E:\www\scubapicture\node_modules\@aws-sdk\middleware-sdk-s3\dist-cjs\index.js:90:20 {
+  '$fault': 'server',
+  '$retryable': undefined,
+  '$metadata': {
+    httpStatusCode: 500,
+    requestId: undefined,
+    extendedRequestId: undefined,
+    cfId: undefined
+  },
+  Code: 'InternalError'
+}
+
+Node.js v24.13.0
+
+
+
+
+------------------------
+
+E:\www\scubapicture\node_modules\@aws-sdk\core\dist-cjs\submodules\protocols\index.js:69
+                throw this.decorateServiceException(Object.assign(new ErrorCtor({ name: errorName }), errorMetadata
+), dataObject);
+                                                                  ^
+
+S3ServiceException [InternalError]: We encountered an internal error. Please try again.
+    at ProtocolLib.getErrorSchemaOrThrowBaseException (E:\www\scubapicture\node_modules\@aws-sdk\core\dist-cjs\subm
+odules\protocols\index.js:69:67)
+    at AwsRestXmlProtocol.handleError (E:\www\scubapicture\node_modules\@aws-sdk\core\dist-cjs\submodules\protocols
+\index.js:1830:65)
+    at AwsRestXmlProtocol.deserializeResponse (E:\www\scubapicture\node_modules\@smithy\core\dist-cjs\submodules\pr
+otocols\index.js:309:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async E:\www\scubapicture\node_modules\@smithy\core\dist-cjs\submodules\schema\index.js:26:24
+    at async E:\www\scubapicture\node_modules\@aws-sdk\middleware-sdk-s3\dist-cjs\index.js:386:20
+    at async E:\www\scubapicture\node_modules\@smithy\middleware-retry\dist-cjs\index.js:254:46
+    at async E:\www\scubapicture\node_modules\@aws-sdk\middleware-flexible-checksums\dist-cjs\index.js:241:24
+    at async E:\www\scubapicture\node_modules\@aws-sdk\middleware-sdk-s3\dist-cjs\index.js:63:28
+    at async E:\www\scubapicture\node_modules\@aws-sdk\middleware-sdk-s3\dist-cjs\index.js:90:20 {
+  '$fault': 'server',
+  '$retryable': undefined,
+  '$metadata': {
+    httpStatusCode: 500,
+    requestId: undefined,
+    extendedRequestId: undefined,
+    cfId: undefined
+  },
+  Code: 'InternalError'
+}
+
+Node.js v24.13.0
+
+
+
+----------------------------------
+----------------------
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+PostgresError: prepared statement "lp734sjomvo3" does not exist
+    at ErrorResponse (file:///E:/www/scubapicture/node_modules/postgres/src/connection.js:815:30)
+    at handle (file:///E:/www/scubapicture/node_modules/postgres/src/connection.js:489:6)
+    at Socket.data (file:///E:/www/scubapicture/node_modules/postgres/src/connection.js:324:9)
+    at Socket.emit (node:events:508:28)
+    at addChunk (node:internal/streams/readable:559:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
+    at Readable.push (node:internal/streams/readable:390:5)
+    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)
+    at cachedError (file:///E:/www/scubapicture/node_modules/postgres/src/query.js:170:23)
+    at new Query (file:///E:/www/scubapicture/node_modules/postgres/src/query.js:36:24)
+    at sql (file:///E:/www/scubapicture/node_modules/postgres/src/index.js:112:11)
+    at SealifePhotoProcessor.getRawRecords (file:///E:/www/scubapicture/src/processor/basic/SealifePhotoProcessor.ts:12:28) {
+  severity_local: 'ERROR',
+  severity: 'ERROR',
+  code: '26000',
+  file: 'prepare.c',
+  line: '485',
+  routine: 'FetchPreparedStatement'
+}
+
+Node.js v24.13.0
+
+
+------------
+
+Image 1765038264467.jpg variant xl processed successfully
+Unable to write statistics for  1765038264467.jpg: null
+Image "photos.1606" variant sm uploaded successfully
+Image "photos.1606" variant md uploaded successfully
+Image "photos.1606" variant lg uploaded successfully
+An error was encountered in a non-retryable streaming request.
+E:\www\scubapicture\node_modules\@aws-sdk\core\dist-cjs\submodules\protocols\index.js:69
+                throw this.decorateServiceException(Object.assign(new ErrorCtor({ name: errorName }), errorMetadata), dataObject);
+                                                                  ^
+
+S3ServiceException [InternalError]: We encountered an internal connectivity issue. Please try again.
+    at ProtocolLib.getErrorSchemaOrThrowBaseException (E:\www\scubapicture\node_modules\@aws-sdk\core\dist-cjs\submodules\protocols\index.js:69:67)
+    at AwsRestXmlProtocol.handleError (E:\www\scubapicture\node_modules\@aws-sdk\core\dist-cjs\submodules\protocols\index.js:1830:65)
+    at AwsRestXmlProtocol.deserializeResponse (E:\www\scubapicture\node_modules\@smithy\core\dist-cjs\submodules\protocols\index.js:309:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async E:\www\scubapicture\node_modules\@smithy\core\dist-cjs\submodules\schema\index.js:26:24
+    at async E:\www\scubapicture\node_modules\@aws-sdk\middleware-sdk-s3\dist-cjs\index.js:386:20
+    at async E:\www\scubapicture\node_modules\@smithy\middleware-retry\dist-cjs\index.js:254:46
+    at async E:\www\scubapicture\node_modules\@aws-sdk\middleware-flexible-checksums\dist-cjs\index.js:241:24
+    at async E:\www\scubapicture\node_modules\@aws-sdk\middleware-sdk-s3\dist-cjs\index.js:63:28
+    at async E:\www\scubapicture\node_modules\@aws-sdk\middleware-sdk-s3\dist-cjs\index.js:90:20 {
+  '$fault': 'server',
+  '$retryable': undefined,
+  '$metadata': {
+    httpStatusCode: 502,
+    requestId: undefined,
+    extendedRequestId: undefined,
+    cfId: undefined
+  },
+  Code: 'InternalError'
+}
+
+Node.js v24.13.0
