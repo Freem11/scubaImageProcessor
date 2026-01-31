@@ -2,19 +2,19 @@ import sql from '../../../db.ts';
 
 import { ScubaProcessor } from './scubaProcessor.ts';
 
-export class DiveShopProcessor extends ScubaProcessor {
-  protected entity = 'shops';
+export class DiveSiteReviewPhotosProcessor extends ScubaProcessor {
+  protected entity = 'diveSiteReviewPhotos';
 
   /**
    * @inheritdoc
    */
   async getRawRecords() {
     const items = await sql`
-    SELECT id, "diveShopProfilePhoto" as "photoFile"
-    FROM "shops"
+    SELECT id, "photoPath" as "photoFile"
+    FROM "diveSiteReviewPhotos"
     WHERE
       image_id IS NULL AND
-      "diveShopProfilePhoto" IS NOT NULL AND "diveShopProfilePhoto" <> ''
+      "photoPath" IS NOT NULL AND "photoPath" <> ''
 
     LIMIT 1
     FOR UPDATE SKIP LOCKED`;

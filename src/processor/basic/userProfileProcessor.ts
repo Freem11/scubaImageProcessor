@@ -12,7 +12,11 @@ export class UserProfileProcessor extends ScubaProcessor {
     const items = await sql`
     SELECT id, "profilePhoto" as "photoFile"
     FROM "UserProfiles"
-    WHERE "profilePhoto" IS NOT NULL AND "profilePhoto" <> ''
+    WHERE 
+      image_id IS NULL AND
+      "profilePhoto" IS NOT NULL AND "profilePhoto" <> ''
+
+    LIMIT 1
     FOR UPDATE SKIP LOCKED`;
 
     return items;

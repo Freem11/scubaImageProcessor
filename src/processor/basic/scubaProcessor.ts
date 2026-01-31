@@ -6,6 +6,7 @@ import { BasicProcessor } from './basicProcessor.ts';
 import { getPathForImageVariant } from '../../util/getPathForImageVariant.ts';
 import { uploadFile } from '../../util/uploadFile.ts';
 import { getFileNameForImageVariant } from '../../util/getFileNameForImageVariant.ts';
+import type { ProcessedVariantKey } from '../../entity/processedVariantKey.ts';
 
 export class ScubaProcessor extends BasicProcessor {
   protected entity = null as string | null;
@@ -32,6 +33,21 @@ export class ScubaProcessor extends BasicProcessor {
         }
 
         if (!error) {
+          const existingRecord = await this.getImageRecordByFileName(fileName);
+          if (existingRecord) {
+            result.push({
+              id:           existingRecord,
+              entity_id:    record.id,
+              entity:       this.entity,
+              error:        error,
+              fileName:     fileName,
+              originalPath: '',
+            });
+            continue;
+          }
+        }
+
+        if (!error) {
           try {
             await downloadFile(originalUrl, originalImagePath);
           } catch (e) {
@@ -40,7 +56,8 @@ export class ScubaProcessor extends BasicProcessor {
         }
 
         result.push({
-          id:           record.id,
+          id:           null,
+          entity_id:    record.id,
           entity:       this.entity,
           error:        error,
           fileName:     fileName,
@@ -53,22 +70,45 @@ export class ScubaProcessor extends BasicProcessor {
   }
 
   async afterImageProcessed(image: Image): Promise<void> {
-    const res = [];
-    for (const variant of this.config.variants) {
-      const variantPath = getPathForImageVariant(image, variant);
-      const absoluteVariantPath = path.resolve(variantPath);
-      const newFileName = getFileNameForImageVariant(image, variant);
-      const key = `variants/${variant.name}/${newFileName}`;
-      await uploadFile(absoluteVariantPath, 'scubaseasons', key);
-      res.push({
-        id:          image.id,
-        key:         key,
-        variantName: variant.name,
-        entity:      this.entity,
-      });
-      console.log(`Image "${this.entity}.${image.id}" variant ${variant.name} uploaded successfully`);
+    if (!image.id) {
+      const variantKeyMap: ProcessedVariantKey[] = [];
+      for (const variant of this.config.variants) {
+        const variantPath = getPathForImageVariant(image, variant);
+        const absoluteVariantPath = path.resolve(variantPath);
+        const newFileName = getFileNameForImageVariant(image, variant);
+        const key = `variants/${variant.name}/${newFileName}`;
+        await uploadFile(absoluteVariantPath, 'scubaseasons', key);
+        variantKeyMap.push({
+          key:         key,
+          variantName: variant.name,
+        });
+        console.log(`Image "${image.entity}.${image.entity_id}" variant ${variant.name} uploaded successfully`);
+      }
+
+      const imageId = await this.createImageRecord(image, variantKeyMap);
+      image.id = imageId;
     }
 
+    if (image.id) {
+      console.log('Update only');
+      await this.updateEntityRecord(image, image.id);
+    }
+  }
+
+  protected async updateEntityRecord(image: Image, imageId: number): Promise<void> {
+    await sql`update ${sql(this.entity)} set image_id = ${imageId} where id = ${image.entity_id}`;
+  }
+
+  protected async getImageRecordByFileName(fileName: string): Promise<number | null> {
+    const response = await sql`select id from images where file_name = ${fileName}`;
+    if (response.length > 0) {
+      return parseInt(response[0].id);
+    }
+
+    return null;
+  }
+
+  protected async createImageRecord(image: Image, processedVariants: ProcessedVariantKey[]): Promise<number> {
     const columns = {
       file_name:     image.fileName,
       updated_at:    sql`now()`,
@@ -76,16 +116,12 @@ export class ScubaProcessor extends BasicProcessor {
       processed_at:  sql`now()`,
       public_domain: 'https://pub-2c7837e6ce9144f5bba12fc08174562f.r2.dev',
     };
-    for (const item of res) {
-      columns[item.variantName] = item.key;
+    for (const processedVariant of processedVariants) {
+      columns[processedVariant.variantName] = processedVariant.key;
     }
 
     const result = await sql`insert into images ${sql(columns, 'created_at', 'updated_at', 'processed_at', 'file_name', 'sm', 'md', 'lg', 'xl', 'public_domain')} returning id`;
-    const imageId = result[0].id;
-    console.log({ result });
-    if (imageId) {
-      await sql`update ${sql(this.entity)} set image_id = ${imageId} where id = ${image.id}`;
-    }
+    return result[0].id;
   }
 
   async process(): Promise<Image[]> {

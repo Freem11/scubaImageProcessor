@@ -1,5 +1,7 @@
 import type { Options } from './src/entity/options.ts';
 import { DiveShopProcessor } from './src/processor/basic/diveShopProcessor.ts';
+import { DiveSiteProcessor } from './src/processor/basic/diveSiteProcessor.ts';
+import { DiveSiteReviewPhotosProcessor } from './src/processor/basic/DiveSiteReviewPhotosProcessor.ts';
 import { SealifePhotoProcessor } from './src/processor/basic/SealifePhotoProcessor.ts';
 import { UserProfileProcessor } from './src/processor/basic/userProfileProcessor.ts';
 import { initProjectConfig } from './src/util/initProjectConfig.ts';
@@ -37,13 +39,19 @@ const options: Options = {
 const projectConfig = initProjectConfig(options);
 // const processor = new SealifePhotoProcessor(projectConfig);
 // const processor = new UserProfileProcessor(projectConfig);
-const processor = new DiveShopProcessor(projectConfig);
+// const processor = new DiveShopProcessor(projectConfig);
+
+// const processor = new DiveSiteReviewPhotosProcessor(projectConfig);
+const processor = new DiveSiteProcessor(projectConfig);
+// const processedImages = await processor.process();
+
 
 for (;;) {
   console.log('----------------------');
   const processedImages = await processor.process();
+  console.log(processedImages);
   if (processedImages.length === 0) {
     break;
   }
-  break;
+  // break;
 }

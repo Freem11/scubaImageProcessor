@@ -139,3 +139,41 @@ S3ServiceException [InternalError]: We encountered an internal connectivity issu
 }
 
 Node.js v24.13.0
+
+
+
+----------------------
+
+
+Error processing image 1762127685794-3.jpeg variant sm: convert-im6.q16: no decode delegate for this image format `' @ error/constitute.c/ReadImage/581.
+convert-im6.q16: no images defined `/home/taras/www/scubaImageProcessor/files/scubaseasons/variants/sm/1762127685794-3.webp' @ error/convert.c/ConvertImageCommand/3234.
+
+Error processing image 1762127685794-3.jpeg variant md: convert-im6.q16: no decode delegate for this image format `' @ error/constitute.c/ReadImage/581.
+convert-im6.q16: no images defined `/home/taras/www/scubaImageProcessor/files/scubaseasons/variants/md/1762127685794-3.webp' @ error/convert.c/ConvertImageCommand/3234.
+
+Error processing image 1762127685794-3.jpeg variant lg: convert-im6.q16: no decode delegate for this image format `' @ error/constitute.c/ReadImage/581.
+convert-im6.q16: no images defined `/home/taras/www/scubaImageProcessor/files/scubaseasons/variants/lg/1762127685794-3.webp' @ error/convert.c/ConvertImageCommand/3234.
+
+Error processing image 1762127685794-3.jpeg variant xl: convert-im6.q16: no decode delegate for this image format `' @ error/constitute.c/ReadImage/581.
+convert-im6.q16: no images defined `/home/taras/www/scubaImageProcessor/files/scubaseasons/variants/xl/1762127685794-3.webp' @ error/convert.c/ConvertImageCommand/3234.
+
+An error was encountered in a non-retryable streaming request.
+node:_http_outgoing:645
+  validateHeaderValue(name, value);
+  ^
+
+TypeError [ERR_HTTP_INVALID_HEADER_VALUE]: Invalid value "undefined" for header "x-amz-decoded-content-length"
+    at ClientRequest.setHeader (node:_http_outgoing:645:3)
+    at new ClientRequest (node:_http_client:355:14)
+    at request (node:https:633:10)
+    at /home/taras/www/scubaImageProcessor/node_modules/@smithy/node-http-handler/dist-cjs/index.js:332:25
+    at new Promise (<anonymous>)
+    at NodeHttpHandler.handle (/home/taras/www/scubaImageProcessor/node_modules/@smithy/node-http-handler/dist-cjs/index.js:268:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async /home/taras/www/scubaImageProcessor/node_modules/@aws-sdk/middleware-flexible-checksums/dist-cjs/index.js:381:20
+    at async /home/taras/www/scubaImageProcessor/node_modules/@aws-sdk/middleware-sdk-s3/dist-cjs/index.js:423:20
+    at async /home/taras/www/scubaImageProcessor/node_modules/@smithy/core/dist-cjs/submodules/schema/index.js:22:26 {
+  code: 'ERR_HTTP_INVALID_HEADER_VALUE'
+}
+
+Node.js v24.13.0

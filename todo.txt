@@ -1,0 +1,2 @@
+imagemagick 7
+sudo apt install libjpeg-dev libwebp-dev libpng-dev libtiff-dev libheif-dev

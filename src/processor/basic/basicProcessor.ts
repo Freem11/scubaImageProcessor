@@ -53,22 +53,24 @@ export class BasicProcessor {
         continue;
       }
 
-      const stat: Array<ImageProcessingStatistics> = [];
-      stat.push({ variantName: 'original', path: image.originalPath, size: NaN });
-      for (const variant of this.config.variants) {
-        try {
-          await this.processImageVariant(image, variant);
-          console.log(`Image ${image.fileName} variant ${variant.name} processed successfully`);
-          const variantPath = getPathForImageVariant(image, variant);
-          const absoluteOutputPath = path.resolve(variantPath);
-          stat.push({ variantName: variant.name, path: absoluteOutputPath, size: NaN });
-        } catch (e) {
-          stat.push({ variantName: variant.name, path: '', size: NaN, error: e });
-          console.error(`Error processing image ${image.fileName} variant ${variant.name}: ${e}`);
+      if (!image.id) {
+        const stat: Array<ImageProcessingStatistics> = [];
+        stat.push({ variantName: 'original', path: image.originalPath, size: NaN });
+        for (const variant of this.config.variants) {
+          try {
+            await this.processImageVariant(image, variant);
+            console.log(`Image ${image.fileName} variant ${variant.name} processed successfully`);
+            const variantPath = getPathForImageVariant(image, variant);
+            const absoluteOutputPath = path.resolve(variantPath);
+            stat.push({ variantName: variant.name, path: absoluteOutputPath, size: NaN });
+          } catch (e) {
+            stat.push({ variantName: variant.name, path: '', size: NaN, error: e });
+            console.error(`Error processing image ${image.fileName} variant ${variant.name}: ${e}`);
+          }
         }
-      }
 
-      saveImageStatistics(this.config.originalDirPath, image.fileName, stat);
+        saveImageStatistics(this.config.originalDirPath, image.fileName, stat);
+      }
       await this.afterImageProcessed(image);
     }
 
