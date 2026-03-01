@@ -7,15 +7,14 @@ import { getPathForImageVariant } from '../../util/getPathForImageVariant.ts';
 import { uploadFile } from '../../util/uploadFile.ts';
 import { getFileNameForImageVariant } from '../../util/getFileNameForImageVariant.ts';
 import type { ProcessedVariantKey } from '../../entity/processedVariantKey.ts';
+import type { RawRecord } from '../../entity/rawRecord.ts';
 
 export class ScubaProcessor extends BasicProcessor {
-  protected entity = null as string | null;
-
   /**
-   * Collects records from this.entity to be processed
+   * Collects records from entity to be processed
    * @returns any[]
    */
-  async getRawRecords() {
+  protected async getRawRecords(): Promise<RawRecord[]> {
     return [];
   }
 
@@ -29,7 +28,7 @@ export class ScubaProcessor extends BasicProcessor {
         const originalUrl = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
         const originalImagePath = path.join(this.config.originalDirPath, fileName);
         if (!fileName) {
-          error = `No valid filename for "${this.entity}.${record.id}": '${record.photoFile}'`;
+          error = `No valid filename for "${this.constructor.name}.${record.id}": '${record.photoFile}'`;
         }
 
         if (!error) {
@@ -38,7 +37,7 @@ export class ScubaProcessor extends BasicProcessor {
             result.push({
               id:           existingRecord,
               entity_id:    record.id,
-              entity:       this.entity,
+              entity:       this.constructor.name,
               error:        error,
               fileName:     fileName,
               originalPath: '',
@@ -51,14 +50,14 @@ export class ScubaProcessor extends BasicProcessor {
           try {
             await downloadFile(originalUrl, originalImagePath);
           } catch (e) {
-            error = `Image download failed for "${this.entity}.${record.id}": '${originalUrl}': ${e.message}`;
+            error = `Image download failed for "${this.constructor.name}.${record.id}": '${originalUrl}': ${e.message}`;
           }
         }
 
         result.push({
           id:           null,
           entity_id:    record.id,
-          entity:       this.entity,
+          entity:       this.constructor.name,
           error:        error,
           fileName:     fileName,
           originalPath: originalImagePath,
@@ -82,7 +81,7 @@ export class ScubaProcessor extends BasicProcessor {
           key:         key,
           variantName: variant.name,
         });
-        console.log(`Image "${image.entity}.${image.entity_id}" variant ${variant.name} uploaded successfully`);
+        console.log(`Image "${this.constructor.name}.${image.entity_id}" variant ${variant.name} uploaded successfully`);
       }
 
       const imageId = await this.createImageRecord(image, variantKeyMap);
@@ -91,12 +90,17 @@ export class ScubaProcessor extends BasicProcessor {
 
     if (image.id) {
       console.log('Update only');
-      await this.updateEntityRecord(image, image.id);
+      await this.updateEntityRecord(image);
     }
   }
 
-  protected async updateEntityRecord(image: Image, imageId: number): Promise<void> {
-    await sql`update ${sql(this.entity)} set image_id = ${imageId} where id = ${image.entity_id}`;
+  /**
+ * Updates the entity record with new image id
+ * @param image - Image object with new image id
+ */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected async updateEntityRecord(image: Image): Promise<void> {
+    // to be implemented in child classes
   }
 
   protected async getImageRecordByFileName(fileName: string): Promise<number | null> {

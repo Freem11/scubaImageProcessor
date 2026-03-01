@@ -1,4 +1,6 @@
 import sql from '../../../db.ts';
+import type { Image } from '../../entity/image.ts';
+import type { RawRecord } from '../../entity/rawRecord.ts';
 
 import { ScubaProcessor } from './scubaProcessor.ts';
 
@@ -8,9 +10,10 @@ export class DiveShopProcessor extends ScubaProcessor {
   /**
    * @inheritdoc
    */
-  async getRawRecords() {
+  protected async getRawRecords() {
+    const result: RawRecord[] = [];
     const items = await sql`
-    SELECT id, "diveShopProfilePhoto" as "photoFile"
+    SELECT id, "diveShopProfilePhoto"
     FROM "shops"
     WHERE
       image_id IS NULL AND
@@ -19,6 +22,20 @@ export class DiveShopProcessor extends ScubaProcessor {
     LIMIT 1
     FOR UPDATE SKIP LOCKED`;
 
-    return items;
+    for (const item of items) {
+      result.push({
+        id:        item.id,
+        photoFile: item.diveShopProfilePhoto,
+      });
+    }
+
+    return result;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  protected async updateEntityRecord(image: Image): Promise<void> {
+    await sql`update "shops" set image_id = ${image.id} where id = ${image.entity_id}`;
   }
 }
