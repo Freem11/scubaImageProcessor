@@ -177,3 +177,42 @@ TypeError [ERR_HTTP_INVALID_HEADER_VALUE]: Invalid value "undefined" for header 
 }
 
 Node.js v24.13.0
+
+
+-----------------------
+
+An error was encountered in a non-retryable streaming request.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AggregateError [ETIMEDOUT]:
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7) {
+  code: 'ETIMEDOUT',
+  name: 'TimeoutError',
+  [errors]: [
+    Error: connect ETIMEDOUT 172.64.66.1:443
+        at createConnectionError (node:net:1678:14)
+        at Timeout.internalConnectMultipleTimeout (node:net:1737:38)
+        at listOnTimeout (node:internal/timers:607:11)
+        at process.processTimers (node:internal/timers:541:7) {
+      errno: -4039,
+      code: 'ETIMEDOUT',
+      syscall: 'connect',
+      address: '172.64.66.1',
+      port: 443
+    },
+    Error: connect ENETUNREACH 2606:4700:2ff9::1:443
+        at createConnectionError (node:net:1678:14)
+        at afterConnectMultiple (node:net:1708:16) {
+      errno: -4062,
+      code: 'ENETUNREACH',
+      syscall: 'connect',
+      address: '2606:4700:2ff9::1',
+      port: 443
+    }
+  ]
+}
+
+Node.js v24.13.0
