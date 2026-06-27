@@ -41,8 +41,8 @@ const projectConfig = initProjectConfig(options);
 // const processor = new UserProfileProcessor(projectConfig);
 // const processor = new DiveShopProcessor(projectConfig);
 
-// const processor = new DiveSiteReviewPhotosProcessor(projectConfig);
-const processor = new DiveSiteProcessor(projectConfig);
+const processor = new DiveSiteReviewPhotosProcessor(projectConfig);
+// const processor = new DiveSiteProcessor(projectConfig);
 // const processedImages = await processor.process();
 
 
@@ -53,5 +53,10 @@ for (;;) {
   if (processedImages.length === 0) {
     break;
   }
+  // commented out = do all, commented in = do one for testing
   // break;
 }
+
+
+// to run use command -> node --env-file=.env scubaseasons.ts
+// or -> npx tsx --env-file=.env scubaseasons.ts
