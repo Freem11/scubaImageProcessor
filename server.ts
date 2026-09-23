@@ -45,7 +45,14 @@ function getProcessor(tableName: string) {
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 const PORT           = process.env.PORT ?? 3000;
 
-const server = http.createServer((req, res) => {
+// Catch any unhandled promise rejections to prevent server crashes
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled rejection:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught exception:', err?.message ?? err);
+});
   // Health check
   if (req.method === 'GET' && req.url === '/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
