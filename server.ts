@@ -106,7 +106,7 @@ const server = http.createServer((req, res) => {
         console.log(`[${tableName}:${recordId}] done`, images.map(i => i.id));
       })
       .catch(err => {
-        console.error(`[${tableName}:${recordId}] error:`, err);
+        console.error(`[${tableName}:${recordId}] error:`, err?.message ?? err);
       });
   });
 });

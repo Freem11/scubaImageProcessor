@@ -25,8 +25,8 @@ DECLARE
   webhook_secret    text;
   payload           jsonb;
 BEGIN
-  edge_function_url := 'https://YOUR-APP.railway.app/process-image';
-  webhook_secret    := 'YOUR-WEBHOOK-SECRET'; -- match this in Railway WEBHOOK_SECRET env var
+  edge_function_url := 'https://scubaimageprocessor-production.up.railway.app/process-image';
+  webhook_secret    := 'scubaseasons2022';
 
   payload := jsonb_build_object(
     'table',  TG_TABLE_NAME,

@@ -1,14 +1,19 @@
 FROM node:22-slim
 
-# Install ImageMagick and JPEG/WebP support
+# Install ImageMagick 7 from source dependencies + build tools
 RUN apt-get update && apt-get install -y \
-    imagemagick \
-    libmagickcore-6.q16-6-extra \
+    wget \
+    build-essential \
+    pkg-config \
     libjpeg-dev \
     libwebp-dev \
     libpng-dev \
     libtiff-dev \
     && rm -rf /var/lib/apt/lists/*
+
+# Install ImageMagick 7 binary from official release
+RUN wget -q https://imagemagick.org/archive/binaries/magick -O /usr/local/bin/magick \
+    && chmod +x /usr/local/bin/magick
 
 WORKDIR /app
 
