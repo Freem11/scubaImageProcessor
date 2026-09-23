@@ -24,6 +24,18 @@ const options: Options = {
 const projectConfig = initProjectConfig(options);
 
 // ---------------------------------------------------------------------------
+// All supported tables — used to drain the full queue on each trigger
+// ---------------------------------------------------------------------------
+
+const TABLE_CONFIG = {
+  diveSiteReviewPhotos: true,
+  diveSites:            true,
+  shops:                true,
+  UserProfiles:         true,
+  photos:               true,
+};
+
+// ---------------------------------------------------------------------------
 // Table → processor map
 // ---------------------------------------------------------------------------
 
@@ -111,15 +123,26 @@ const server = http.createServer((req, res) => {
     res.writeHead(202, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ received: true, table: tableName, id: recordId }));
 
-    // Process in background
+    // Process in background — drain ALL tables of unprocessed records
     console.log(`[${tableName}:${recordId}] processing triggered`);
-    processor.process()
-      .then(images => {
-        console.log(`[${tableName}:${recordId}] done`, images.map(i => i.id));
-      })
-      .catch(err => {
-        console.error(`[${tableName}:${recordId}] error:`, err?.message ?? err);
-      });
+    (async () => {
+      for (const table of Object.keys(TABLE_CONFIG)) {
+        const proc = getProcessor(table);
+        if (!proc) continue;
+        let count = 0;
+        for (;;) {
+          const images = await proc.process();
+          if (images.length === 0) break;
+          count += images.length;
+        }
+        if (count > 0) {
+          console.log(`[${table}] drained ${count} records`);
+        }
+      }
+      console.log(`all tables drained`);
+    })().catch(err => {
+      console.error(`processing error:`, err?.message ?? err);
+    });
   });
 });
 
