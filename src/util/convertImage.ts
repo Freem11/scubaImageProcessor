@@ -22,7 +22,7 @@ export const convertImage = async (image: Image, variant: ImageVariant): Promise
   ];
 
   return new Promise<boolean>((resolve, reject) => {
-    const process = spawn('magick', args);
+    const process = spawn('convert', args);
 
     process.on('error', (err) => {
       reject(new Error(`Failed to spawn magick: ${err.message}`));
