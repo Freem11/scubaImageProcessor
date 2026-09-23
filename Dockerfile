@@ -17,6 +17,9 @@ RUN wget -q https://imagemagick.org/archive/binaries/magick -O /usr/local/bin/ma
 
 WORKDIR /app
 
+# Cache bust - increment this when you need a fresh build
+ARG CACHE_BUST=2
+
 # Install dependencies
 COPY package*.json ./
 RUN npm ci
