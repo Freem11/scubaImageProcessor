@@ -50,16 +50,24 @@ export class ScubaProcessor extends BasicProcessor {
           try {
             await downloadFile(originalUrl, originalImagePath);
           } catch (e) {
-            error = `Image download failed for "${this.constructor.name}.${record.id}": '${originalUrl}': ${e.message}`;
+            // Download failed (e.g. 404) — log and skip this record entirely
+            console.error(`Skipping "${this.constructor.name}.${record.id}": download failed for '${originalUrl}': ${e.message}`);
+            continue;
           }
+        }
+
+        if (error) {
+          // Other pre-download error (e.g. no filename) — skip
+          console.error(error);
+          continue;
         }
 
         result.push({
           id:           null,
           entity_id:    record.id,
           entity:       this.constructor.name,
-          error:        error,
-          fileName:     fileName,
+          error:        null,
+          fileName:     fileName!,
           originalPath: originalImagePath,
         });
       }
