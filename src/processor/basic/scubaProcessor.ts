@@ -151,10 +151,10 @@ export class ScubaProcessor extends BasicProcessor {
   }
 
   async process(): Promise<Image[]> {
-    await sql`Start Transaction`;
-    const result = await super.process();
-    await sql`Commit`;
-
-    return result;
+    // No explicit transaction here — each image is an independent unit and
+    // FOR UPDATE SKIP LOCKED in getRawRecords prevents two processors grabbing
+    // the same row. Wrapping in a single transaction caused the whole batch to
+    // abort when any one image hit a conflict (e.g. race on images.file_name).
+    return super.process();
   }
 }
