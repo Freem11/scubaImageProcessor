@@ -149,3 +149,16 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
   console.log(`process-image server listening on port ${PORT}`);
 });
+
+// ---------------------------------------------------------------------------
+// Keep-alive cron — hits /health every 4 hours to prevent Oracle idle reclaim
+// ---------------------------------------------------------------------------
+const FOUR_HOURS = 4 * 60 * 60 * 1000;
+setInterval(async () => {
+  try {
+    const res = await fetch(`http://localhost:${PORT}/health`);
+    console.log(`[cron] health ping: ${res.status}`);
+  } catch (err) {
+    console.error('[cron] health ping failed:', err?.message ?? err);
+  }
+}, FOUR_HOURS);

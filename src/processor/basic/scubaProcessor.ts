@@ -132,8 +132,22 @@ export class ScubaProcessor extends BasicProcessor {
       columns[processedVariant.variantName] = processedVariant.key;
     }
 
-    const result = await sql`insert into images ${sql(columns, 'created_at', 'updated_at', 'processed_at', 'file_name', 'sm', 'md', 'lg', 'xl', 'public_domain')} returning id`;
-    return result[0].id;
+    // ON CONFLICT DO NOTHING guards against a race where two processor calls
+    // check getImageRecordByFileName simultaneously, both get null, and both
+    // attempt to insert. The second insert is silently dropped; we then fetch
+    // the winner's id.
+    const result = await sql`
+      insert into images ${sql(columns, 'created_at', 'updated_at', 'processed_at', 'file_name', 'sm', 'md', 'lg', 'xl', 'public_domain')}
+      ON CONFLICT (file_name) DO NOTHING
+      returning id`;
+
+    if (result.length > 0) {
+      return result[0].id;
+    }
+
+    // Another process won the race — fetch the existing record's id
+    const existing = await sql`select id from images where file_name = ${image.fileName}`;
+    return parseInt(existing[0].id);
   }
 
   async process(): Promise<Image[]> {
