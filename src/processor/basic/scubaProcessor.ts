@@ -84,6 +84,17 @@ export class ScubaProcessor extends BasicProcessor {
         const absoluteVariantPath = path.resolve(variantPath);
         const newFileName = getFileNameForImageVariant(image, variant);
         const key = `variants/${variant.name}/${newFileName}`;
+
+        // Skip upload if the variant file doesn't exist — conversion may have
+        // failed for this variant. The record stays unprocessed and will be
+        // retried on the next poll cycle.
+        try {
+          await import('fs/promises').then(fs => fs.access(absoluteVariantPath));
+        } catch {
+          console.warn(`Skipping upload for ${image.fileName} variant ${variant.name} — file not found (conversion likely failed)`);
+          continue;
+        }
+
         await uploadFile(absoluteVariantPath, 'scubaseasons', key);
         variantKeyMap.push({
           key:         key,
